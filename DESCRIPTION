@@ -1,0 +1,15 @@
+Package: renovae
+Title: An R Interface For The Novae Deep Learning Framework
+Version: 0.0.0.9000
+Authors@R: 
+    person("Gabriele", "Sales", , "gabriele.sales@unipd.it", role = c("aut", "cre"))
+Description: Provides a demonstration interface to the 'novae' deep 
+    learning framework. This package serves as a proof-of-concept wrapper, 
+    enabling basic model initialization and interaction within the R 
+    environment via 'reticulate'. It is intended for experimental use and 
+    to illustrate the integration of 'novae' architectures with R 
+    workflows.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.3
