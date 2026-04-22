@@ -1,4 +1,4 @@
-#' Load Janesick Breast Cancer Crop (h5ad)
+#' Load Janesick Breast Cancer Crop (AnnData)
 #'
 #' Loads a 25000x25000 pixel crop of the 10x Genomics Xenium Human Breast
 #' Cancer FFPE dataset (Rep 1).
@@ -9,13 +9,13 @@
 #'
 #' @return An AnnData object (via reticulate).
 #' @export
-load_janesick_h5ad <- function() {
+load_janesick_ad <- function() {
   sc <- reticulate::import("scanpy")
   filename <- fs::path_package("extdata", "janesick.h5ad", package = "renovae")
   sc$read_h5ad(filename)
 }
 
-#' Load Janesick Breast Cancer Crop (rds)
+#' Load Janesick Breast Cancer Crop (SpatialExperiment)
 #'
 #' Loads a 25000x25000 pixel crop of the 10x Genomics Xenium Human Breast
 #' Cancer FFPE dataset (Rep 1) as a SpatialExperiment object.

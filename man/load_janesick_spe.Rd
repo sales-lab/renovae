@@ -2,7 +2,7 @@
 % Please edit documentation in R/dataset.R
 \name{load_janesick_spe}
 \alias{load_janesick_spe}
-\title{Load Janesick Breast Cancer Crop (rds)}
+\title{Load Janesick Breast Cancer Crop (SpatialExperiment)}
 \usage{
 load_janesick_spe()
 }
