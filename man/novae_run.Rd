@@ -2,18 +2,26 @@
 % Please edit documentation in R/inference.R
 \name{novae_run}
 \alias{novae_run}
-\title{Perform a one-slide zero-short inference.}
+\title{Perform a one-slide zero-shot inference using the \code{novae} model.}
 \usage{
-novae_run(spe, gpu = FALSE)
+novae_run(obj, accelerator = "auto")
 }
 \arguments{
-\item{spe}{A \code{SpatialExperiment} object.}
+\item{obj}{A \code{SpatialExperiment} object or an \code{AnnData} object loaded
+through \code{reticulate}.}
 
-\item{gpu}{Use a GPU accelerator.}
+\item{accelerator}{The hardware accelerator to use for computation.
+Supported values include \code{"auto"}, \code{"cpu"}, \code{"cuda"}, \code{"gpu"}, and \code{"mps"}.
+Defaults to \code{"auto"}.}
 }
 \value{
-The embedding matrix computed by \code{novae}.
+A numeric matrix of the latent representations (embeddings)
+computed by \code{novae}, where rows correspond to cells/spots and columns
+to latent features.
 }
 \description{
-Perform a one-slide zero-short inference.
+This function computes high-dimensional embeddings for each cell or spot in a
+spatial transcriptomics dataset using a pre-trained \code{novae} model.
+It supports both native \code{SpatialExperiment} objects and \code{AnnData} objects
+(via \code{reticulate}).
 }
