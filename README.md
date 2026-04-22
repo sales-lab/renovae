@@ -1,12 +1,14 @@
-# renovae: Reproduction of SpatialExperiment-to-AnnData conversion issue
+# renovae: Interoperability between SpatialExperiment and AnnData
 
-`renovae` serves as a reproduction case for an issue encountered when converting `SpatialExperiment` objects to `AnnData` using the `anndataR` package, specifically in the context of the [novae](https://github.com/MICS-Lab/novae) deep learning framework.
+`renovae` provides an interface to the [novae](https://github.com/MICS-Lab/novae) deep learning framework for spatial
+transcriptomics, ensuring seamless interoperability between R-native `SpatialExperiment` objects and Python-native
+`AnnData` structures.
 
-## The Issue
+## Overview
 
-When converting a `SpatialExperiment` object back to `AnnData` (via `anndataR::from_SpatialExperiment`), the downstream Python analysis fails to recognize the spatial neighbor information, even after an explicit neighbor computation step. 
+The package leverages `anndataR` to facilitate high-fidelity conversion between R and Python objects.
 
-For more details, please see the [repro vignette](vignettes/repro.Rmd).
+For more details and a demonstration of the workflow, please see the [interop vignette](vignettes/interop.Rmd).
 
 ## Installation
 
@@ -15,7 +17,7 @@ You can install the development version of `renovae` from GitHub:
 ```r
 # Install dependencies
 if (!require("remotes")) install.packages("remotes")
-remotes::install_github("drighelli/anndataR@from_as_spe")
+remotes::install_github("sales-lab/anndataR@from_as_spe")
 
 # Install renovae
 remotes::install_github("renovae/renovae")

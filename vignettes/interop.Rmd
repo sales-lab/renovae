@@ -1,0 +1,70 @@
+---
+title: "Interoperability between SpatialExperiment and AnnData"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Interoperability between SpatialExperiment and AnnData}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(renovae)
+
+Sys.setenv(TQDM_DISABLE = "1")
+```
+
+This vignette demonstrates the seamless interoperability between the R `SpatialExperiment`
+class and the Python `AnnData` format, specifically in the context of the
+[novae](https://www.nature.com/articles/s41592-025-02899-6) foundation model.
+
+## Background
+
+The `renovae` package provides an interface to the `novae` deep learning framework for spatial transcriptomics. While
+`novae` is natively implemented in Python and expects `AnnData` objects as input, `renovae` leverages `anndataR`
+to allow R users to work directly with `SpatialExperiment` objects.
+
+## The Dataset
+
+We use a crop of the Janesick et al. (2023) Xenium human breast cancer dataset.
+
+```{r load-data}
+# Load as SpatialExperiment
+spe <- load_janesick_spe()
+spe
+
+# Load as AnnData
+ad <- load_janesick_ad()
+ad
+```
+
+## Running the Inference
+
+The `novae_run` function is designed to handle both input types transparently.
+
+### Starting from AnnData
+
+If you already have an `AnnData` object (e.g., loaded via `reticulate` or `anndataR`), you can run the model
+directly. The embeddings will be returned as a matrix:
+
+```r
+out_ad <- novae_run(ad)
+```
+
+### Starting from SpatialExperiment
+
+For R users, the most common entry point is a `SpatialExperiment`. `renovae` automatically handles the conversion to
+`AnnData` behind the scenes.
+
+```{r run-spe}
+out_spe <- novae_run(spe)
+
+# The result contains the 64-dimensional cell embeddings computed by the model
+dim(out_spe)
+```
