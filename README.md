@@ -1,6 +1,12 @@
-# renovae: An R Interface for the Novae Deep Learning Framework
+# renovae: Reproduction of SpatialExperiment-to-AnnData conversion issue
 
-`renovae` provides a proof-of-concept R interface to the [novae](https://github.com/MICS-Lab/novae) deep learning framework for spatial transcriptomics. It allows users to perform zero-shot inference on `SpatialExperiment` objects within the R environment via `reticulate`.
+`renovae` serves as a reproduction case for an issue encountered when converting `SpatialExperiment` objects to `AnnData` using the `anndataR` package, specifically in the context of the [novae](https://github.com/MICS-Lab/novae) deep learning framework.
+
+## The Issue
+
+When converting a `SpatialExperiment` object back to `AnnData` (via `anndataR::from_SpatialExperiment`), the downstream Python analysis fails to recognize the spatial neighbor information, even after an explicit neighbor computation step. 
+
+For more details, please see the [repro vignette](vignettes/repro.Rmd).
 
 ## Installation
 
@@ -17,23 +23,10 @@ remotes::install_github("renovae/renovae")
 
 ### Python Dependencies
 
-`renovae` requires the `novae` Python package. You can install it via `pip`:
+`renovae` requires the `novae` and `scanpy` Python packages. You can install them via `pip`:
 
 ```bash
-pip install novae
-```
-
-## Usage
-
-The main function `novae_run` performs one-slide zero-shot inference on a `SpatialExperiment` object.
-
-```r
-library(renovae)
-library(SpatialExperiment)
-
-# Perform zero-shot inference
-# spe: A SpatialExperiment object
-latent <- novae_run(spe, gpu = FALSE)
+pip install novae scanpy
 ```
 
 ## License
