@@ -18,7 +18,7 @@
 #' @export
 novae_run <- function(obj, accelerator = "auto") {
   if (is(obj, "SpatialExperiment")) {
-    ad <- anndataR::from_SpatialExperiment(obj)
+    ad <- anndataR::from_SpatialExperiment(obj, output_class = "ReticulateAnnData")
   } else if (is(obj, "ReticulateAnnData")) {
     ad <- obj
   } else {
