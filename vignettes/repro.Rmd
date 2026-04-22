@@ -1,0 +1,78 @@
+---
+title: "Reproduction of SpatialExperiment-to-AnnData conversion issue"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Reproduction of SpatialExperiment-to-AnnData conversion issue}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(renovae)
+```
+
+This vignette documents an issue encountered when converting `SpatialExperiment` objects back to `AnnData`
+using the `anndataR` package, specifically in the context of spatial transcriptomics data and the
+[novae](https://www.nature.com/articles/s41592-025-02899-6) foundation model.
+
+## Background
+
+The `renovae` package provides an interface to the `novae` deep learning framework for spatial transcriptomics. While
+`novae` is natively implemented in Python and expects `AnnData` objects as input, `renovae` aims to allow R users
+to work directly with the native `SpatialExperiment` class.
+
+## The Dataset
+
+We start from an `AnnData` object representing a 25,000 x 25,000 pixel crop of the original Janesick et al. (2023)
+Xenium human breast cancer dataset. In the context of the package, the original object can be loaded with:
+
+```{r load-ad, eval=FALSE}
+# This requires a Python environment with scanpy and novae installed
+ad <- load_janesick_ad()
+```
+
+We used a fork of the `anndataR` package (from `drighelli/anndataR@from_as_spe`) to convert this object into the
+`SpatialExperiment` native R class. This object is also provided by the package:
+
+```{r load-spe}
+spe <- load_janesick_spe()
+spe
+```
+
+## Running the Inference
+
+In principle, we could now use either to run the inference from the `novae` model. For instance, using the
+`novae_run` function provided by this package, one could run the model directly on the `AnnData` object:
+
+```r
+out_ad <- novae_run(ad)
+```
+
+This returns the cell embeddings computed by the model for later inspection.
+
+While `novae` requires `AnnData` as an input, we could start from an `SpatialExperiment` by using the conversion
+function provided by [anndataR](https://github.com/scverse/anndataR) (`anndataR::from_SpatialExperiment`). We
+implemented this approach in the `novae_run` helper to facilitate seamless integration for R users.
+
+```{r, error = TRUE}
+out_spe <- novae_run(spe)
+```
+
+## Observed Issue
+
+When running `novae_run` starting from the `SpatialExperiment` object, the initial phase of the `novae` analysis
+(neighbor graph computation) appears to run, but the subsequent step (representation computation) complains about
+missing cell neighbor information.
+
+We believe this issue relates to the `SpatialExperiment` -> `AnnData` conversion. Specifically, the round-trip
+conversion may not be preserving the spatial neighbor structures or the underlying spatial coordinate metadata in a
+way that is fully compatible with the downstream Python tools. This indicates that while the conversion provides
+an `AnnData` object, it might be lacking some critical elements required by the `novae` framework's internal
+processing logic.

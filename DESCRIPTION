@@ -19,3 +19,7 @@ Imports:
     reticulate
 Remotes:
     github::drighelli/anndataR@from_as_spe
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
